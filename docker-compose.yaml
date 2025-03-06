@@ -1,0 +1,34 @@
+version: "3.8"
+name: films_shop
+
+services:
+  mongodb:
+    image: mongo:8.0  
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo-data:/data/db
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    restart: always
+    ports:
+      - "9000:9000"  
+      - "9090:9090"  
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    volumes:
+      - minio-data:/data
+    command: server --console-address ":9090" /data
+
+volumes:
+  mongo-data:
+    driver: local
+  minio-data:

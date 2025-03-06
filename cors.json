@@ -1,0 +1,12 @@
+{
+  "Version": "1.0",
+  "Rules": [
+    {
+      "AllowedOrigins": ["http://localhost:8081"],
+      "AllowedMethods": ["GET", "PUT", "POST", "DELETE"],
+      "AllowedHeaders": ["*"],
+      "ExposeHeaders": ["ETag"],
+      "MaxAgeSeconds": 3000
+    }
+  ]
+}

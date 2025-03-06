@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    .logout-button {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      padding: 10px 15px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 600px;
+      margin-top: 60px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .image-container {
+      margin-right: 20px;
+    }
+
+    .image-preview {
+      max-width: 100px;
+      max-height: 100px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .form-section {
+      flex: 1;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px;
+      width: 100%;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    #filmList {
+      display: flex;
+      flex-direction: column;
+      /* Изменено на column */
+      margin-top: 40px;
+      width: 100%;
+    }
+
+    .film-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin: 10px;
+      padding: 15px;
+      display: flex;
+      /* Используем flexbox для карточек фильмов */
+      align-items: center;
+      /* Выравниваем по центру */
+    }
+
+    .film-card img {
+      width: 100px;
+      /* Ширина изображения */
+      height: 100px;
+      /* Высота изображения */
+      border-radius: 5px;
+      margin-right: 15px;
+      /* Отступ между изображением и текстом */
+    }
+
+    .film-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .film-info {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .delete-button {
+      background-color: #dc3545;
+      margin-left: auto;
+      /* Сдвигаем кнопку вправо */
+      margin-top: 10px;
+      padding: 5px 10px;
+      /* Уменьшаем отступы кнопки */
+      border-radius: 4px;
+      /* Добавляем округлые края */
+      color: white;
+      /* Цвет текста */
+    }
+
+    .delete-button:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="logoutButton" class="logout-button" style="display:none;">Выйти</button>
+  <div class="container">
+
+    <div class="form-section">
+
+      <h2 id="formTitle">Вход в админку</h2>
+      <form id="loginForm" class="form-section">
+        <label for="adminName">Имя администратора:</label>
+        <input type="text" id="adminName" name="adminName" required>
+
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Войти</button>
+      </form>
+
+      <form id="registrationForm" class="form-section" style="display:none;">
+        <h2>Регистрация нового фильма</h2>
+
+        <label for="img">Изображение:</label>
+        <input type="file" id="img" name="img" accept="image/*" required>
+        <img id="imagePreview" class="image-preview" src="" alt="Preview">
+
+        <label for="title">Название:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="subtitle">Подзаголовок:</label>
+        <input type="text" id="subtitle" name="subtitle" required>
+
+        <label for="price">Цена:</label>
+        <input type="text" id="price" name="price" required>
+
+        <label for="category">Категория:</label>
+        <input type="text" id="category" name="category" required>
+
+        <label for="description">Описание:</label>
+        <input type="text" id="description" name="description" required>
+
+        <label for="code">Код:</label>
+        <input type="text" id="code" name="code" required>
+
+        <label for="firm">Фирма:</label>
+        <input type="text" id="firm" name="firm" required>
+
+        <button type="submit">Добавить фильм</button>
+      </form>
+      <h2>Список фильмов</h2>
+      <div id="filmList">
+        <div id="films">
+
+          <div class="film-card">
+            <img src="film_image.jpg" alt="Фильм">
+            <div class="film-details">
+              <div class="film-title">Название фильма</div>
+              <div class="film-info">Дополнительная информация</div>
+              <button class="delete-button">Удалить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  function checkToken() {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      document.getElementById('formTitle').innerText = 'Вы уже вошли в систему';
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('logoutButton').style.display = 'block';
+      document.getElementById('registrationForm').style.display = 'block';
+      loadFilms();
+    }
+  }
+
+  checkToken();
+
+  document.getElementById('loginForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const adminName = document.getElementById('adminName').value;
+    const password = document.getElementById('password').value;
+
+    const response = await fetch('http://localhost:3000/admin/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ adminName, password }),
+    });
+
+    if (response.ok) {
+      const { token } = await response.json();
+      localStorage.setItem('jwt', token);
+      alert('Вы успешно вошли в систему!');
+      checkToken();
+    } else {
+      alert('Неправильное имя администратора или пароль.');
+    }
+  });
+
+  document.getElementById('logoutButton').addEventListener('click', function () {
+    localStorage.removeItem('jwt');
+    alert('Вы вышли из системы.');
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('registrationForm').style.display = 'none';
+    this.style.display = 'none';
+    document.getElementById('formTitle').innerText = 'Вход в админку';
+    document.getElementById('films').innerHTML = '';
+  });
+
+  document.getElementById('img').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const imagePreview = document.getElementById('imagePreview');
+      imagePreview.src = e.target.result;
+      imagePreview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('registrationForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const img = document.getElementById('img').files[0];
+    const title = document.getElementById('title').value;
+    const subtitle = document.getElementById('subtitle').value;
+    const price = document.getElementById('price').value;
+    const category = document.getElementById('category').value;
+    const description = document.getElementById('description').value;
+    const code = document.getElementById('code').value;
+    const firm = document.getElementById('firm').value;
+
+    const formData = new FormData();
+    formData.append('img', img);
+    formData.append('title', title);
+    formData.append('subtitle', subtitle);
+    formData.append('price', price);
+    formData.append('category', category);
+    formData.append('description', description);
+    formData.append('code', code);
+    formData.append('firm', firm);
+
+    const response = await fetch('http://localhost:3000/films', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+      },
+      body: formData,
+    });
+
+    if (response.ok) {
+      alert('Фильм добавлен успешно!');
+      document.getElementById('registrationForm').reset();
+      document.getElementById('imagePreview').style.display = 'none';
+      loadFilms();
+    } else {
+      alert('Ошибка при добавлении фильма.');
+    }
+  });
+
+  async function loadFilms() {
+    const response = await fetch('http://localhost:3000/films');
+
+    if (!response.ok) {
+      alert('Ошибка при загрузке фильмов: ' + response.statusText);
+      return;
+    }
+
+    const films = await response.json();
+
+    if (films.length === 0) {
+      document.getElementById('films').innerHTML = '<p>Нет доступных фильмов.</p>';
+      return;
+    }
+
+    const filmsContainer = document.getElementById('films');
+    filmsContainer.innerHTML = ''; 
+
+    films.forEach(film => {
+      const filmCard = document.createElement('div');
+      filmCard.classList.add('film-card');
+
+      filmCard.innerHTML = `
+                <img src="${film.img}" alt="${film.title}" style="width: 100%;">
+                <div class="film-title">${film.title}</div>
+                <div class="film-info">Цена: ${film.price}₽</div>
+                <div class="film-info">Категория: ${film.category}</div>
+                <div class="film-info">Описание: ${film.description}</div>
+                <button class="delete-button" data-id="${film._id}">Удалить</button>
+            `;
+
+  
+      filmCard.querySelector('.delete-button').addEventListener('click', async () => {
+        const confirmDelete = confirm('Вы уверены, что хотите удалить этот фильм?');
+        if (confirmDelete) {
+          await deleteFilm(film._id);
+          loadFilms();  
+        }
+      });
+
+      filmsContainer.appendChild(filmCard);  
+    });
+  }
+
+  async function deleteFilm(id) {
+    const response = await fetch(`http://localhost:3000/films/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      alert('Ошибка при удалении фильма: ' + response.statusText);
+    }
+  }
+
+  window.onload = loadFilms;
+</script>
+</body>
+
+</html>
