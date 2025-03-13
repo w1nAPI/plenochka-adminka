@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("cors"); // Import cors
+const cors = require("cors");  
 const path = require("path");
 const filmsRouter = require("./src/films/films.router");
 const userRouter = require("./src/users/users.router");

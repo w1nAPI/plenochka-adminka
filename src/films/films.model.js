@@ -11,4 +11,4 @@ const FilmSchema = new mongoose.Schema({
   firm: { type: String },
 });
 
-module.exports = mongoose.model("Film", FilmSchema);
+module.exports = mongoose.model("film", FilmSchema);
